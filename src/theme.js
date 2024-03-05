@@ -163,30 +163,38 @@ export const themeSettings = (mode) => {
     },
     typography: {
       fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-      fonstSize: 12,
+      fonstSize: 14,
       h1: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 40,
+        fonstSize: "6rem",
       },
       h2: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 32,
+        fonstSize: "3.75rem",
       },
       h3: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 24,
+        fonstSize: "3rem",
       },
       h4: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 20,
+        fonstSize: "2.15rem",
       },
       h5: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 16,
+        fonstSize: "1.5rem",
       },
       h6: {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
-        fonstSize: 14,
+        fonstSize: "1.25rem",
+      },
+      body1: {
+        fontFamily: ["Nunito Sans", "sans-serif"].join(","),
+        fonstSize: "1rem",
+      },
+      body2: {
+        fontFamily: ["Nunito Sans", "sans-serif"].join(","),
+        fonstSize: "0.875rem",
       },
     },
   };

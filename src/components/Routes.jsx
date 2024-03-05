@@ -1,4 +1,5 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Route, Routes, Navigate } from "react-router-dom";
+import { useApiContext } from "../context/ApiContext";
 import AppLayout from "./layout/AppLayout";
 import MainLayout from "./layout/MainLayout";
 import Dashboard from "../scenes/dashboard";
@@ -14,6 +15,19 @@ import Geography from "../scenes/geography";
 import Calendar from "../scenes/calendar";
 import Login from "../scenes/login";
 
+/*const IndustryRoute = ({ children }) => {
+  const { generalSettings } = useApiContext();
+  if (generalSettings.role === "industria") {
+    return children;
+  }
+  return <Navigate to="/home" />;
+};*/
+
+const ProtectedRoute = ({ element }) => {
+  const { generalSettings } = useApiContext();
+  return generalSettings.isLoggedIn ? element : <Navigate to="/" replace />;
+};
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -26,7 +40,12 @@ export const router = createBrowserRouter([
       {
         path: "home",
         element: <MainLayout />,
-        children: [{ index: true, element: <Dashboard /> }],
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+        ],
       },
       {
         path: "team",

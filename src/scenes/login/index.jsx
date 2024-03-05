@@ -61,8 +61,10 @@ const Login = () => {
           >
             <TextField
               margin="normal"
+              variant="filled"
               required
               fullWidth
+              color="secondary"
               id="username"
               label="Usuario"
               name="username"
@@ -71,7 +73,9 @@ const Login = () => {
             />
             <TextField
               margin="normal"
+              variant="filled"
               required
+              color="secondary"
               fullWidth
               name="password"
               label="Contraseña"

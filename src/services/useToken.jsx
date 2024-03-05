@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const useToken = () => {
   const getTokens = () => {
@@ -6,12 +6,12 @@ const useToken = () => {
     const tokenString = sessionStorage.getItem("tokens");
 
     // Intenta analizar el tokenString a JSON
-    const tokens = JSON.parse(tokenString);
+    const sTokens = JSON.parse(tokenString);
     // Retorna el token solo si se pudo analizar correctamente
-    return tokens;
+    return sTokens;
   };
 
-  const [tokens, setTokens] = useState(getTokens());
+  const [sTokens, setTokens] = useState(getTokens());
 
   const saveTokens = (apiResponse) => {
     // Almacenar la respuesta de la API en sessionStorage
@@ -33,7 +33,7 @@ const useToken = () => {
   return {
     setTokens: saveTokens,
     clearTokens,
-    tokens,
+    sTokens,
   };
 };
 
