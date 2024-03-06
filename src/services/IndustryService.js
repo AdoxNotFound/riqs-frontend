@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const industryReconection = async (userToken) => {
+export const industryReconection = async (userToken) => {
   try {
     const response = await axiosInstance.get("/auth/reconection", {
       headers: {
@@ -23,8 +23,48 @@ const industryReconection = async (userToken) => {
   }
 };
 
-export default industryReconection;
-// incluir solicitudes propias del usuario industria
-// /api/industry/settings
-// /api/industry/import-xls
-// api/industry/save-acopio
+export const uploadWeeklyFile = async (userToken, file, setFileInfo) => {
+  const formData = new FormData();
+  formData.append("file", file);
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data",
+      Authorization: userToken,
+    },
+  };
+
+  try {
+    const response = await axiosInstance.post(
+      "/industry/upload-xls",
+      formData,
+      config
+    );
+
+    console.log("Archivo enviado correctamente:", response.data);
+    setFileInfo(response.data);
+    return response.data;
+  } catch (error) {
+    console.error("Error al enviar el archivo:", error);
+    throw error;
+  }
+};
+
+export const reviewAcopio = async (userToken, fileName, worksheet) => {
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: userToken,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      name_file: fileName,
+      worksheet: worksheet,
+    };
+    const response = await axiosInstance.post("/industry/import-acopio", data, {
+      headers,
+    });
+    console.log("Solicitud de revisión enviada con éxito:", response.data);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};

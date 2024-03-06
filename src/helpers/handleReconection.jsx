@@ -1,4 +1,4 @@
-import industryReconection from "../services/IndustryService";
+import { industryReconection } from "../services/IndustryService";
 
 export const handleReconection = async (token, updateIndustrySettings) => {
   try {

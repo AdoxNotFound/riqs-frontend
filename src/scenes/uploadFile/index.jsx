@@ -1,27 +1,74 @@
 import {
   Box,
-  Typography,
+  Button,
   useTheme,
   Table,
+  CircularProgress,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Header from "../../components/Header";
 import { useApiContext } from "../../context/ApiContext";
 import { tokens } from "../../theme";
 import { uploadData } from "../../data/uploadData";
-import Button from "@mui/material/Button";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import * as React from "react";
+import { useState } from "react";
+import { styled } from "@mui/material/styles";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { uploadWeeklyFile, reviewAcopio } from "../../services/IndustryService";
+
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
+  height: 1,
+  overflow: "hidden",
+  position: "absolute",
+  bottom: 0,
+  left: 0,
+  whiteSpace: "nowrap",
+  width: 1,
+});
 
 const UploadFile = () => {
-  const { industrySettings } = useApiContext();
+  const { industrySettings, generalSettings } = useApiContext();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
+  const [fileInfo, setFileInfo] = useState(null);
+  const [selectedSheets, setSelectedSheets] = useState({});
+  const [loading, setLoading] = useState(false);
+
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
+
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    setLoading(true);
+    uploadWeeklyFile(generalSettings.token, file, setFileInfo);
+    setLoading(false);
+    const initialSelectedSheets = {};
+    uploadData.forEach((row) => {
+      initialSelectedSheets[row.id] = "";
+    });
+    setSelectedSheets(initialSelectedSheets);
+  };
+
+  const handleSheetChange = (event, rowId) => {
+    setSelectedSheets({
+      ...selectedSheets,
+      [rowId]: event.target.value,
+    });
+  };
+
+  const handleButtonClick = async (rowId) => {
+    const selectedSheet = selectedSheets[rowId];
+
+    reviewAcopio(generalSettings.token, fileInfo.data.file_name, selectedSheet);
+  };
 
   return (
     <Box m="20px">
@@ -30,9 +77,13 @@ const UploadFile = () => {
           title={industrySettings.periodName}
           subtitle="Subir reporte quincenal"
         />
-
         <Box>
           <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
             sx={{
               backgroundColor: colors.blueAccent[700],
               color: colors.grey[100],
@@ -41,38 +92,64 @@ const UploadFile = () => {
               padding: "10px 20px",
             }}
           >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
+            Subir archivo
+            <VisuallyHiddenInput type="file" onChange={handleFileChange} />
           </Button>
         </Box>
       </Box>
 
-      <TableContainer sx={{ m: "40px 0 0 0", height: "90vh" }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>N</TableCell>
-              <TableCell>Reportes</TableCell>
-              <TableCell>Selector</TableCell>
-              <TableCell>Movimiento</TableCell>
-              <TableCell>Revisar</TableCell>
-              <TableCell>Respuesta</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {uploadData.map((row) => (
-              <TableRow key={row.id}>
-                {renderTableCell(row.id)}
-                {renderTableCell(row.reportName)}
-                {renderTableCell(row.selector)}
-                {renderTableCell(row.empty)}
-                {renderTableCell(row.review)}
-                {renderTableCell(row.response)}
+      {loading ? (
+        <Box textAlign="center" mt={2}>
+          <CircularProgress />
+        </Box>
+      ) : fileInfo ? (
+        <TableContainer sx={{ m: "40px 0 0 0", height: "90vh" }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>N</TableCell>
+                <TableCell>Reportes</TableCell>
+                <TableCell>Selector</TableCell>
+                <TableCell>Movimiento</TableCell>
+                <TableCell>Revisar</TableCell>
+                <TableCell>Respuesta</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+            </TableHead>
+            <TableBody>
+              {uploadData.map((row) => (
+                <TableRow key={row.id}>
+                  {renderTableCell(row.id)}
+                  {renderTableCell(row.reportName)}
+                  <TableCell>
+                    <Select
+                      value={selectedSheets[row.id]}
+                      onChange={(e) => handleSheetChange(e, row.id)}
+                    >
+                      {fileInfo &&
+                        fileInfo.data &&
+                        fileInfo.data.sheets.map((sheetName, index) => (
+                          <MenuItem key={index} value={sheetName}>
+                            {sheetName}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </TableCell>
+                  {renderTableCell(row.empty)}
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleButtonClick(row.id)}
+                    >
+                      Revisar
+                    </Button>
+                  </TableCell>
+                  <TableCell>{row.response}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : null}
       <Box display="flex" justifyContent="space-evenly" m="10">
         <Button
           sx={{
@@ -82,15 +159,6 @@ const UploadFile = () => {
           }}
         >
           Cancelar
-        </Button>
-        <Button
-          sx={{
-            mb: 1,
-            backgroundColor: colors.blueAccent[700],
-            color: colors.grey[100],
-          }}
-        >
-          Guardar
         </Button>
         <Button
           sx={{
@@ -108,12 +176,3 @@ const UploadFile = () => {
 };
 
 export default UploadFile;
-/* periodName: 'empty',
-year: 2020,
-month: 1,
-biweekly: 1,
-startDate: "2024-02-01",
-endDate: "2024-02-07",
-limitDate: "2024-02-15",
-status: 'undefined',
-industryOptions: ['option1'],  */
