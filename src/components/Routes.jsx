@@ -13,6 +13,7 @@ import FAQ from "../scenes/faq";
 import Geography from "../scenes/geography";
 import Calendar from "../scenes/calendar";
 import Login from "../scenes/login";
+import UploadFile from "../scenes/uploadFile";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,11 @@ export const router = createBrowserRouter([
         path: "geography",
         element: <MainLayout />,
         children: [{ index: true, element: <Geography /> }],
+      },
+      {
+        path: "upload-file",
+        element: <MainLayout />,
+        children: [{ index: true, element: <UploadFile /> }],
       },
     ],
   },

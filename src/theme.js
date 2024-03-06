@@ -196,6 +196,9 @@ export const themeSettings = (mode) => {
         fontFamily: ["Nunito Sans", "sans-serif"].join(","),
         fonstSize: "0.875rem",
       },
+      button: {
+        textTransform: "none",
+      },
     },
   };
 };

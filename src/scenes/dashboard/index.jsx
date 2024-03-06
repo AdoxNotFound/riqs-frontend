@@ -1,4 +1,12 @@
-import { Box, Button, IconButton, Typography, useTheme } from "@mui/material";
+import { React, useEffect } from "react";
+import {
+  Box,
+  Button,
+  IconButton,
+  Typography,
+  useTheme,
+  Stack,
+} from "@mui/material";
 import { tokens } from "../../theme";
 import { mockTransactions } from "../../data/mockData";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
@@ -12,10 +20,19 @@ import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
+import { useApiContext } from "../../context/ApiContext";
+import { handleReconection } from "../../helpers/handleReconection";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const { generalSettings, industrySettings, updateIndustrySettings } =
+    useApiContext();
+
+  useEffect(() => {
+    handleReconection(generalSettings.token, updateIndustrySettings);
+  }, []);
 
   return (
     <Box m="20px">
@@ -171,6 +188,7 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
+          {/* insertar aqui */}
           <Box
             display="flex"
             justifyContent="space-between"
@@ -187,6 +205,30 @@ const Dashboard = () => {
               Recent Transactions
             </Typography>
           </Box>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "space-between",
+              rowGap: 2,
+            }}
+          >
+            <Typography>{industrySettings.startDate}</Typography>
+            <Typography sx={{ color: "green" }}>5 dias restantes</Typography>
+            <Button
+              sx={{
+                mb: 1,
+                backgroundColor: colors.blueAccent[700],
+                color: colors.grey[100],
+              }}
+              component={Link}
+              to="/upload-file"
+            >
+              Ingresar nuevo formulario
+            </Button>
+          </Box>
+          {/* 
           {mockTransactions.map((transaction, i) => (
             <Box
               key={`${transaction.txId}-${i}`}
@@ -218,6 +260,8 @@ const Dashboard = () => {
               </Box>
             </Box>
           ))}
+
+          */}
         </Box>
 
         {/* ROW 3 */}
