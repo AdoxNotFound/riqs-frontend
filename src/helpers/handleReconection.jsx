@@ -15,8 +15,14 @@ export const handleReconection = async (token, updateIndustrySettings) => {
         month: response.data.data.period.month,
         biweekly: response.data.data.period.biweekly,
         startDate: response.data.data.period.date_start,
-        endDate: response.data.data.period.date_end,
-        limitDate: response.data.data.period.date_limit,
+        endDate: response.data.data.period.deadline,
+        limitDate: response.data.data.period.second_deadline,
+        today: response.data.data.today,
+        periodStatus: {
+          daysLeft: response.data.data.period.day_estatus.days_left,
+          daysLate: response.data.data.period.day_estatus.days_late,
+          dayStatus: response.data.data.period.day_estatus.status,
+        },
         status: response.data.data.period.status,
         industryOptions: optionNames,
       });

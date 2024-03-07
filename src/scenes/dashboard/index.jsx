@@ -8,16 +8,17 @@ import {
   Stack,
 } from "@mui/material";
 import { tokens } from "../../theme";
-import { mockTransactions } from "../../data/mockData";
+import TableLegend from "./TableLegend";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
+import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import GeographyChart from "../../components/GeographyChart";
 import BarChart from "../../components/BarChart";
+import IndustryMatrix from "./IndustryMatrix";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import { useApiContext } from "../../context/ApiContext";
@@ -38,7 +39,10 @@ const Dashboard = () => {
     <Box m="20px">
       {/* HEADER */}
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Header title="DASHBOARD" subtitle="Welcome to your dashboard" />
+        <Header
+          title="Inicio"
+          subtitle="Bienvenido al registro de informes quincenales de soya"
+        />
 
         <Box>
           <Button
@@ -50,8 +54,8 @@ const Dashboard = () => {
               padding: "10px 20px",
             }}
           >
-            <DownloadOutlinedIcon sx={{ mr: "10px" }} />
-            Download Reports
+            <CalendarMonthOutlinedIcon sx={{ mr: "10px" }} />
+            Cambiar gestión
           </Button>
         </Box>
       </Box>
@@ -73,7 +77,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="12,361"
-            subtitle="Emails Sent"
+            subtitle="Ventas Harina Solvente de Soya"
             progress="0.75"
             increase="+14%"
             icon={
@@ -92,7 +96,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="431,225"
-            subtitle="Sales Obtained"
+            subtitle="Ventas Harina Integral de Soya"
             progress="0.50"
             increase="+21%"
             icon={
@@ -111,7 +115,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="32,441"
-            subtitle="New Clients"
+            subtitle="Ventas Cascarilla de Soya"
             progress="0.30"
             increase="+5%"
             icon={
@@ -130,7 +134,7 @@ const Dashboard = () => {
         >
           <StatBox
             title="1,325,134"
-            subtitle="Traffic Received"
+            subtitle="Ventas Aceite Refinado de Soya"
             progress="0.80"
             increase="+43%"
             icon={
@@ -153,33 +157,16 @@ const Dashboard = () => {
             display="flex "
             justifyContent="space-between"
             alignItems="center"
+            flexDirection="column"
           >
-            <Box>
-              <Typography
-                variant="body1"
-                fontWeight="600"
-                color={colors.grey[100]}
-              >
-                Revenue Generated
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bold"
-                color={colors.greenAccent[500]}
-              >
-                $59,342.32
+            <Box display="flex" alignItems="flex-start" width="600px" m={2}>
+              <Typography variant="h5" color={colors.grey[100]}>
+                Resumen Anual
               </Typography>
             </Box>
-            <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
-            </Box>
-          </Box>
-          <Box height="250px" m="-20px 0 0 0">
-            <LineChart isDashboard={true} />
+
+            <IndustryMatrix />
+            <TableLegend />
           </Box>
         </Box>
         <Box
@@ -202,7 +189,7 @@ const Dashboard = () => {
               variant="body1"
               fontWeight="600"
             >
-              Recent Transactions
+              Quincena en curso
             </Typography>
           </Box>
           <Box
@@ -214,8 +201,21 @@ const Dashboard = () => {
               rowGap: 2,
             }}
           >
-            <Typography>{industrySettings.startDate}</Typography>
-            <Typography sx={{ color: "green" }}>5 dias restantes</Typography>
+            <Typography variant="body2">
+              {industrySettings.periodName}
+            </Typography>
+            <Typography variant="body2">
+              Fecha en curso: {industrySettings.today}
+            </Typography>
+            <Typography variant="body2">
+              Fecha limite de subida: {industrySettings.endDate}
+            </Typography>
+            <Typography variant="body2">
+              Fin de la quincena: {industrySettings.limitDate}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "green" }}>
+              {industrySettings.periodStatus.dayStatus}
+            </Typography>
             <Button
               sx={{
                 mb: 1,
@@ -228,43 +228,49 @@ const Dashboard = () => {
               Ingresar nuevo formulario
             </Button>
           </Box>
-          {/* 
-          {mockTransactions.map((transaction, i) => (
-            <Box
-              key={`${transaction.txId}-${i}`}
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-              borderBottom={`4px solid ${colors.primary[500]}`}
-              p="15px"
-            >
-              <Box>
-                <Typography
-                  color={colors.greenAccent[500]}
-                  variant="body1"
-                  fontWeight="600"
-                >
-                  {transaction.txId}
-                </Typography>
-                <Typography color={colors.grey[100]}>
-                  {transaction.user}
-                </Typography>
-              </Box>
-              <Box color={colors.grey[100]}>{transaction.date}</Box>
-              <Box
-                backgroundColor={colors.greenAccent[500]}
-                p="5px 10px"
-                borderRadius="4px"
-              >
-                ${transaction.cost}
-              </Box>
-            </Box>
-          ))}
-
-          */}
         </Box>
 
         {/* ROW 3 */}
+        <Box
+          gridColumn="span 8"
+          gridRow="span 2"
+          backgroundColor={colors.primary[400]}
+        >
+          <Box
+            mt="25px"
+            p="0 30px"
+            display="flex "
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <Box>
+              <Typography
+                variant="body1"
+                fontWeight="600"
+                color={colors.grey[100]}
+              >
+                Total Ventas
+              </Typography>
+              <Typography
+                variant="h5"
+                fontWeight="bold"
+                color={colors.greenAccent[500]}
+              >
+                0
+              </Typography>
+            </Box>
+            <Box>
+              <IconButton>
+                <DownloadOutlinedIcon
+                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
+                />
+              </IconButton>
+            </Box>
+          </Box>
+          <Box height="250px" m="-20px 0 0 0">
+            <BarChart isDashboard={false} />
+          </Box>
+        </Box>
         <Box
           gridColumn="span 4"
           gridRow="span 2"
@@ -272,7 +278,7 @@ const Dashboard = () => {
           p="30px"
         >
           <Typography variant="body1" fontWeight="600">
-            Campaign
+            Compromisos
           </Typography>
           <Box
             display="flex"
@@ -286,42 +292,9 @@ const Dashboard = () => {
               color={colors.greenAccent[500]}
               sx={{ mt: "15px" }}
             >
-              $48,352 revenue generated
+              48,352 Tm Harina entregada
             </Typography>
-            <Typography>Includes extra misc expenditures and costs</Typography>
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-        >
-          <Typography
-            variant="body1"
-            fontWeight="600"
-            sx={{ padding: "30px 30px 0 30px" }}
-          >
-            Sales Quantity
-          </Typography>
-          <Box height="250px" mt="-20px">
-            <BarChart isDashboard={true} />
-          </Box>
-        </Box>
-        <Box
-          gridColumn="span 4"
-          gridRow="span 2"
-          backgroundColor={colors.primary[400]}
-          padding="30px"
-        >
-          <Typography
-            variant="body1"
-            fontWeight="600"
-            sx={{ marginBottom: "15px" }}
-          >
-            Geography Based Traffic
-          </Typography>
-          <Box height="200px">
-            <GeographyChart isDashboard={true} />
+            <Typography>Dompromiso asumido por la industria</Typography>
           </Box>
         </Box>
       </Box>

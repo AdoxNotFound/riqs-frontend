@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "./layout/AppLayout";
 import MainLayout from "./layout/MainLayout";
-import Dashboard from "../scenes/dashboard";
+import Dashboard from "../scenes/dashboard/index";
 import Team from "../scenes/team";
 import Invoices from "../scenes/invoices";
 import Contacts from "../scenes/contacts";

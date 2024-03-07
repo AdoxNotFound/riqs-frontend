@@ -38,7 +38,7 @@ export const userMenuItems = {
       icon: <HomeOutlinedIcon />,
     },
     {
-      title: "Contacts Information",
+      title: "Administración",
       to: "/contacts",
       icon: <ContactsOutlinedIcon />,
     },
@@ -55,7 +55,7 @@ export const userMenuItems = {
       icon: <HomeOutlinedIcon />,
     },
     {
-      title: "Manage Team",
+      title: "Administración",
       to: "/team",
       icon: <PeopleOutlinedIcon />,
     },

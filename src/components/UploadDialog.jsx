@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -21,6 +21,8 @@ import Typography from "@mui/material/Typography";
 import { useApiContext } from "../context/ApiContext";
 import { reviewAcopio } from "../services/IndustryService";
 
+import { DataGrid } from "@mui/x-data-grid";
+
 export default function ResponsiveDialog({
   open,
   handleClose,
@@ -33,6 +35,8 @@ export default function ResponsiveDialog({
 
   const [selectedSheets, setSelectedSheets] = React.useState({});
 
+  const [rows, setRows] = useState([]);
+
   const handleSheetChange = (event) => {
     setSelectedSheets(event.target.value);
   };
@@ -41,9 +45,21 @@ export default function ResponsiveDialog({
     reviewAcopio(
       generalSettings.token,
       fileInfo.data.file_name,
-      selectedSheets
+      selectedSheets,
+      setRows
     );
   };
+
+  const columns = [
+    { field: "id", headerName: "ID", width: 100 },
+    { field: "date_reception", headerName: "Fecha de Recepción", width: 200 },
+    { field: "resume_tm_bruto", headerName: "Resumen TM Bruto", width: 200 },
+    {
+      field: "resume_tm_liquido",
+      headerName: "Resumen TM Líquido",
+      width: 200,
+    },
+  ];
 
   return (
     <Dialog
@@ -107,6 +123,16 @@ export default function ResponsiveDialog({
             Revisar reporte
           </Button>
         </Box>
+        <div style={{ height: 400, width: "100%" }}>
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            pageSize={5}
+            rowsPerPageOptions={[5]}
+            checkboxSelection
+            disableSelectionOnClick
+          />
+        </div>
       </DialogContent>
       <DialogActions>
         <Button autoFocus onClick={() => handleClose()}>

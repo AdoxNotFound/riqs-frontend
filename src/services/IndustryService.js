@@ -49,7 +49,7 @@ export const uploadWeeklyFile = async (userToken, file, setFileInfo) => {
   }
 };
 
-export const reviewAcopio = async (userToken, fileName, worksheet) => {
+export const reviewAcopio = async (userToken, fileName, worksheet, setRows) => {
   try {
     const headers = {
       Accept: "application/json",
@@ -64,6 +64,16 @@ export const reviewAcopio = async (userToken, fileName, worksheet) => {
       headers,
     });
     console.log("Solicitud de revisión enviada con éxito:", response.data);
+
+    // Formatear los datos para que coincidan con el formato del Data Grid
+    const formattedRows = data.map((item, index) => ({
+      id: index + 1,
+      date_reception: item.date_reception,
+      resume_tm_bruto: item.resume_tm_bruto,
+      resume_tm_liquido: item.resume_tm_liquido,
+    }));
+
+    setRows(formattedRows);
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }
