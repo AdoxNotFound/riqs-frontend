@@ -13,7 +13,7 @@ import FAQ from "../scenes/faq";
 import Geography from "../scenes/geography";
 import Calendar from "../scenes/calendar";
 import Login from "../scenes/login";
-import UploadFile from "../scenes/uploadFile";
+import UploadFile from "../scenes/uploadFile/index";
 
 export const router = createBrowserRouter([
   {
