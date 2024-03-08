@@ -89,14 +89,14 @@ export default function BasicTable() {
       component={Paper}
       variant="outlined"
       square={false}
-      sx={{ maxWidth: 750, backgroundColor: colors.primary[400] }}
+      sx={{ backgroundColor: colors.primary[400] }}
     >
-      <Table aria-label="simple table" size="small">
+      <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Quincena</TableCell>
-            <TableCell>Ene</TableCell>
-            <TableCell>Feb</TableCell>
+            <TableCell sx={{ width: "40%" }}>Ene</TableCell>
+            <TableCell sx={{ width: 40 }}>Feb</TableCell>
             <TableCell>Mar</TableCell>
             <TableCell>Abr</TableCell>
             <TableCell>May</TableCell>
@@ -115,7 +115,7 @@ export default function BasicTable() {
               key={rowIndex}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row" sx={{ width: "50px" }}>
+              <TableCell component="th" scope="row" sx={{ width: "30px" }}>
                 {row.quincena}
               </TableCell>
               {Object.values(row)
@@ -126,7 +126,7 @@ export default function BasicTable() {
                     align="right"
                     onMouseEnter={(event) => handleMouseEnter(event, data)}
                     onMouseLeave={handleMouseLeave}
-                    sx={{ width: "50px" }}
+                    sx={{ width: "30px" }}
                   >
                     {statusIcons[data.estado]}
                   </TableCell>

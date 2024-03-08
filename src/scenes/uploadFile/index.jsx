@@ -8,11 +8,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Select,
-  MenuItem,
   Typography,
 } from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
 import Header from "../../components/Header";
 import { useApiContext } from "../../context/ApiContext";
 import { tokens } from "../../theme";
@@ -45,13 +42,11 @@ const UploadFile = () => {
 
   const [fileInfo, setFileInfo] = useState(null);
   const [selectedSheets, setSelectedSheets] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    setLoading(true);
     uploadWeeklyFile(generalSettings.token, file, setFileInfo);
 
     const initialSelectedSheets = {};
@@ -59,35 +54,7 @@ const UploadFile = () => {
       initialSelectedSheets[row.id] = "";
     });
     setSelectedSheets(initialSelectedSheets);
-    setLoading(false);
   };
-
-  const handleSheetChange = (event, rowId) => {
-    setSelectedSheets({
-      ...selectedSheets,
-      [rowId]: event.target.value,
-    });
-  };
-
-  const handleButtonClick = async (rowId) => {
-    const selectedSheet = selectedSheets[rowId];
-    reviewAcopio(generalSettings.token, fileInfo.data.file_name, selectedSheet);
-  };
-
-  const renderSelector = (rowId) => (
-    <Select
-      value={selectedSheets[rowId] || ""}
-      onChange={(e) => handleSheetChange(e, rowId)}
-    >
-      {fileInfo &&
-        fileInfo.data &&
-        fileInfo.data.sheets.map((sheetName, index) => (
-          <MenuItem key={index} value={sheetName}>
-            {sheetName}
-          </MenuItem>
-        ))}
-    </Select>
-  );
 
   const handleClickOpen = (reportName) => {
     setOpen(true);
@@ -108,11 +75,7 @@ const UploadFile = () => {
           />
         </Box>
 
-        {loading ? (
-          <Box alignItems="center" mt={2} height={500} display="flex">
-            <CircularProgress color="secondary" />
-          </Box>
-        ) : fileInfo ? (
+        {fileInfo ? (
           <Box>
             <Typography>
               Nombre del archivo: {fileInfo.data.file_name}

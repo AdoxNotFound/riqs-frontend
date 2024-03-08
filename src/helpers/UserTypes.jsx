@@ -10,7 +10,7 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 //import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
-//import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
+import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
 //import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import MapOutlinedIcon from "@mui/icons-material/MapOutlined";
 
@@ -53,6 +53,11 @@ export const userMenuItems = {
       title: "Inicio",
       to: "/home",
       icon: <HomeOutlinedIcon />,
+    },
+    {
+      title: "Line Chart",
+      to: "/line",
+      icon: <TimelineOutlinedIcon />,
     },
     {
       title: "Administración",

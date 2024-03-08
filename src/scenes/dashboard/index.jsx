@@ -18,6 +18,7 @@ import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
 import BarChart from "../../components/BarChart";
+import MyResponsiveCalendar from "../../components/ResponsiveCalendar";
 import IndustryMatrix from "./IndustryMatrix";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
@@ -201,21 +202,10 @@ const Dashboard = () => {
               rowGap: 2,
             }}
           >
-            <Typography variant="body2">
-              {industrySettings.periodName}
-            </Typography>
-            <Typography variant="body2">
-              Fecha en curso: {industrySettings.today}
-            </Typography>
-            <Typography variant="body2">
-              Fecha limite de subida: {industrySettings.endDate}
-            </Typography>
-            <Typography variant="body2">
-              Fin de la quincena: {industrySettings.limitDate}
-            </Typography>
-            <Typography variant="body2" sx={{ color: "green" }}>
-              {industrySettings.periodStatus.dayStatus}
-            </Typography>
+            <Box width={250} height={250}>
+              <MyResponsiveCalendar />
+            </Box>
+
             <Button
               sx={{
                 mb: 1,
@@ -268,7 +258,7 @@ const Dashboard = () => {
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">
-            <BarChart isDashboard={false} />
+            <LineChart isDashboard={false} />
           </Box>
         </Box>
         <Box
