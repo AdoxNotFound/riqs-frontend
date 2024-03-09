@@ -1,23 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
-import Checkbox from "@mui/material/Checkbox";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { useApiContext } from "../../context/ApiContext";
 import { useNavigate } from "react-router-dom";
-import useToken from "../../services/useToken";
-import { handleSubmit } from "../../helpers/handleLoginResponse";
+import { handleLoginResponse } from "../../helpers/handleLoginResponse";
+import { userLogin } from "../../services/authService";
 
 const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const { updateGeneralSettings } = useApiContext();
-  const { setTokens } = useToken();
   const navigate = useNavigate();
+
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+
+  const validationSchema = Yup.object().shape({
+    username: Yup.string().required("Usuario requerido"),
+    password: Yup.string().required("Contraseña requerida"),
+  });
+
+  const handleFormSubmit = async (values, { setSubmitting, setErrors }) => {
+    console.log("Form values:", values);
+    try {
+      const response = await userLogin(values);
+      // Handle response
+      handleLoginResponse(response, updateGeneralSettings, navigate);
+    } catch (error) {
+      // Handle error
+      //console.error("Error al realizar la solicitud:", error);
+      setErrors({ api: error.response.data.meta.errors[0] });
+    }
+    setSubmitting(false);
+  };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
@@ -40,63 +61,61 @@ const Login = () => {
             }}
           >
             <img src="/green_logo.svg" alt="RIQS logo" width={150} />
-            <Typography variant="h1">RIQS</Typography>
+            <Typography variant="h2">RIQS</Typography>
           </Box>
 
-          <Typography variant="h4">Iniciar sesión</Typography>
-          <Box
-            component="form"
-            noValidate
-            onSubmit={(e) =>
-              handleSubmit(
-                e,
-                username,
-                password,
-                setTokens,
-                updateGeneralSettings,
-                navigate
-              )
-            }
-            sx={{ mt: 1 }}
+          <Typography variant="h5">Iniciar sesión</Typography>
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={handleFormSubmit}
           >
-            <TextField
-              margin="normal"
-              variant="filled"
-              required
-              fullWidth
-              color="secondary"
-              id="username"
-              label="Usuario"
-              name="username"
-              autoFocus
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              margin="normal"
-              variant="filled"
-              required
-              color="secondary"
-              fullWidth
-              name="password"
-              label="Contraseña"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Recordarme"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Iniciar sesión
-            </Button>
-          </Box>
+            {({ isSubmitting, errors, touched, handleBlur, handleChange }) => (
+              <Form>
+                <TextField
+                  margin="normal"
+                  variant="filled"
+                  required
+                  fullWidth
+                  color="secondary"
+                  id="username"
+                  label="Usuario"
+                  name="username"
+                  autoFocus
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={!!touched.username && !!errors.username}
+                  helperText={touched.username && errors.username}
+                />
+                <TextField
+                  margin="normal"
+                  variant="filled"
+                  required
+                  color="secondary"
+                  fullWidth
+                  name="password"
+                  label="Contraseña"
+                  type="password"
+                  id="password"
+                  autoComplete="current-password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  error={!!touched.password && !!errors.password}
+                  helperText={touched.password && errors.password}
+                />
+                {errors.api && <div style={{ color: "red" }}>{errors.api}</div>}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
+                </Button>
+              </Form>
+            )}
+          </Formik>
         </Box>
       </Grid>
       {/* background image */}

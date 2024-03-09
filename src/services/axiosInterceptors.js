@@ -8,7 +8,7 @@ export const setupRequestInterceptor = (setLoading) => {
       return request;
     },
     (error) => {
-      console.error("Axios Request Error:", error);
+      //console.error("Axios Request Error:", error);
       setLoading(false);
       return Promise.reject(error);
     }
@@ -23,7 +23,7 @@ export const setupResponseInterceptor = (setLoading) => {
       return response;
     },
     (error) => {
-      console.error("Axios Response Error:", error);
+      //console.error("Axios Response Error:", error);
       setLoading(false);
       return Promise.reject(error);
     }

@@ -4,7 +4,10 @@ import axiosInstance from "./axiosInstance";
 
 export const userLogin = async (credentials) => {
   try {
-    const response = await axiosInstance.post("/auth/login", credentials);
+    const response = await axiosInstance.post("/auth/login", {
+      username: credentials.username,
+      password: credentials.password,
+    });
     return response;
   } catch (error) {
     console.error("Error al realizar la solicitud Axios:", error);

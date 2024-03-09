@@ -1,15 +1,7 @@
 import { React, useEffect } from "react";
-import {
-  Box,
-  Button,
-  IconButton,
-  Typography,
-  useTheme,
-  Stack,
-} from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 import { tokens } from "../../theme";
 import TableLegend from "./TableLegend";
-import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import CalendarMonthOutlinedIcon from "@mui/icons-material/CalendarMonthOutlined";
 import EmailIcon from "@mui/icons-material/Email";
 import PointOfSaleIcon from "@mui/icons-material/PointOfSale";
@@ -17,9 +9,8 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import TrafficIcon from "@mui/icons-material/Traffic";
 import Header from "../../components/Header";
 import LineChart from "../../components/LineChart";
-import BarChart from "../../components/BarChart";
-import MyResponsiveCalendar from "../../components/ResponsiveCalendar";
-import IndustryMatrix from "./IndustryMatrix";
+//import MyResponsiveCalendar from "../../components/ResponsiveCalendar";
+import IndustryMesh from "./IndustryMesh";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import { useApiContext } from "../../context/ApiContext";
@@ -160,13 +151,13 @@ const Dashboard = () => {
             alignItems="center"
             flexDirection="column"
           >
-            <Box display="flex" alignItems="flex-start" width="600px" m={2}>
+            <Box display="flex" alignItems="flex-start" width="600px" my={3}>
               <Typography variant="h5" color={colors.grey[100]}>
-                Resumen Anual
+                Resumen Anual {industrySettings.year}
               </Typography>
             </Box>
-
-            <IndustryMatrix />
+            <IndustryMesh />
+            {/*<IndustryMatrix />*/}
             <TableLegend />
           </Box>
         </Box>
@@ -181,15 +172,10 @@ const Dashboard = () => {
             display="flex"
             justifyContent="space-between"
             alignItems="center"
-            borderBottom={`4px solid ${colors.primary[500]}`}
             colors={colors.grey[100]}
             p="15px"
           >
-            <Typography
-              color={colors.grey[100]}
-              variant="body1"
-              fontWeight="600"
-            >
+            <Typography color={colors.grey[100]} variant="h6" fontWeight="600">
               Quincena en curso
             </Typography>
           </Box>
@@ -199,11 +185,11 @@ const Dashboard = () => {
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "space-between",
-              rowGap: 2,
             }}
           >
-            <Box width={250} height={250}>
-              <MyResponsiveCalendar />
+            <Box>
+              <Typography>{industrySettings.periodName} </Typography>
+              <Typography>Fecha actual: {industrySettings.today} </Typography>
             </Box>
 
             <Button
@@ -248,13 +234,6 @@ const Dashboard = () => {
               >
                 0
               </Typography>
-            </Box>
-            <Box>
-              <IconButton>
-                <DownloadOutlinedIcon
-                  sx={{ fontSize: "26px", color: colors.greenAccent[500] }}
-                />
-              </IconButton>
             </Box>
           </Box>
           <Box height="250px" m="-20px 0 0 0">

@@ -8,19 +8,15 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
 import Switch from "@mui/material/Switch";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
-
 import { useApiContext } from "../context/ApiContext";
 import { reviewAcopio } from "../services/IndustryService";
-
 import { DataGrid } from "@mui/x-data-grid";
 
 export default function ResponsiveDialog({
@@ -36,6 +32,7 @@ export default function ResponsiveDialog({
   const [selectedSheets, setSelectedSheets] = React.useState({});
 
   const [rows, setRows] = useState([]);
+  const [total, setTotal] = useState(0);
 
   const handleSheetChange = (event) => {
     setSelectedSheets(event.target.value);
@@ -46,18 +43,39 @@ export default function ResponsiveDialog({
       generalSettings.token,
       fileInfo.data.file_name,
       selectedSheets,
-      setRows
+      setRows,
+      setTotal
     );
   };
 
+  const handleCancel = () => {
+    setSelectedSheets({});
+    setRows([]);
+    setTotal(0);
+    handleClose();
+  };
+
   const columns = [
-    { field: "id", headerName: "ID", width: 100 },
-    { field: "date_reception", headerName: "Fecha de Recepción", width: 200 },
-    { field: "resume_tm_bruto", headerName: "Resumen TM Bruto", width: 200 },
+    { field: "id", headerName: "ID", width: 50, sortable: false },
+    {
+      field: "date_reception",
+      headerName: "Fecha de Recepción",
+      width: 180,
+      sortable: false,
+    },
+    {
+      field: "resume_tm_bruto",
+      headerName: "Resumen TM Bruto",
+      width: 180,
+      type: "number",
+      sortable: false,
+    },
     {
       field: "resume_tm_liquido",
       headerName: "Resumen TM Líquido",
-      width: 200,
+      width: 180,
+      type: "number",
+      sortable: false,
     },
   ];
 
@@ -71,8 +89,7 @@ export default function ResponsiveDialog({
       <DialogTitle id="responsive-dialog-title">{rowName}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          Let Google help apps determine location. This means sending anonymous
-          location data to Google, even when no apps are running.
+          Siga los pasos para realizar la declaración del formulario.
         </DialogContentText>
         <Box
           display="flex"
@@ -123,22 +140,30 @@ export default function ResponsiveDialog({
             Revisar reporte
           </Button>
         </Box>
-        <div style={{ height: 400, width: "100%" }}>
+        <div style={{ height: "auto", width: "100%" }}>
           <DataGrid
             rows={rows}
             columns={columns}
             pageSize={5}
             rowsPerPageOptions={[5]}
-            checkboxSelection
-            disableSelectionOnClick
+            disableColumnSelector
+            disableRowSelectionOnClick
+            disableColumnMenu
+            hideFooter
+            density="compact"
+            columnVisibilityModel={{
+              // Hide columns status and traderName, the other columns will remain visible
+              id: false,
+            }}
           />
+          <Typography>Total TM Liquido: {total}</Typography>
         </div>
       </DialogContent>
       <DialogActions>
-        <Button autoFocus onClick={() => handleClose()}>
+        <Button autoFocus onClick={handleCancel}>
           Disagree
         </Button>
-        <Button onClick={() => handleClose()} autoFocus>
+        <Button onClick={handleCancel} autoFocus>
           Agree
         </Button>
       </DialogActions>
