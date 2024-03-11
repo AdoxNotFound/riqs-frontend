@@ -13,12 +13,14 @@ import {
 import Header from "../../components/Header";
 import { useApiContext } from "../../context/ApiContext";
 import { tokens } from "../../theme";
-import { uploadData } from "../../data/uploadData";
+//import { uploadData } from "../../data/uploadData";
 import React, { useState } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { uploadWeeklyFile, reviewAcopio } from "../../services/IndustryService";
-import ResponsiveDialog from "../../components/UploadDialog";
+import { uploadWeeklyFile } from "../../services/IndustryService";
+import ResponsiveDialog from "./UploadDialog";
+
+// las lineas comentadas son para utilizar el selector de paginas de excel, si es que se llegará a utilizar más adelante
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -38,10 +40,10 @@ const UploadFile = () => {
   const colors = tokens(theme.palette.mode);
 
   const [open, setOpen] = React.useState(false);
-  const [selectedReport, setSelectedReport] = React.useState(null);
+  const [selectedReport, setSelectedReport] = React.useState({});
 
   const [fileInfo, setFileInfo] = useState(null);
-  const [selectedSheets, setSelectedSheets] = useState({});
+  //const [selectedSheets, setSelectedSheets] = useState({});
 
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
 
@@ -50,10 +52,10 @@ const UploadFile = () => {
     uploadWeeklyFile(generalSettings.token, file, setFileInfo);
 
     const initialSelectedSheets = {};
-    uploadData.forEach((row) => {
+    industrySettings.industryOptions.forEach((row) => {
       initialSelectedSheets[row.id] = "";
     });
-    setSelectedSheets(initialSelectedSheets);
+    //setSelectedSheets(initialSelectedSheets);
   };
 
   const handleClickOpen = (reportName) => {
@@ -91,22 +93,22 @@ const UploadFile = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {uploadData.map((row) => (
+                  {industrySettings.industryOptions.map((row) => (
                     <TableRow key={row.id}>
                       {renderTableCell(row.id)}
-                      {renderTableCell(row.reportName)}
+                      {renderTableCell(row.name)}
 
                       <TableCell>
                         <Button
                           variant="outlined"
                           color="secondary"
                           size="small"
-                          onClick={() => handleClickOpen(row.reportName)}
+                          onClick={() => handleClickOpen(row)}
                         >
                           Revisar
                         </Button>
                       </TableCell>
-                      {renderTableCell(row.response)}
+                      {renderTableCell(row.route)}
                     </TableRow>
                   ))}
                 </TableBody>
@@ -120,18 +122,9 @@ const UploadFile = () => {
                   backgroundColor: colors.blueAccent[700],
                   color: colors.grey[100],
                 }}
+                onClick={() => setFileInfo(null)}
               >
-                Cancelar
-              </Button>
-              <Button
-                sx={{
-                  mb: 1,
-                  backgroundColor: colors.blueAccent[700],
-                  color: colors.grey[100],
-                }}
-                disabled
-              >
-                Finalizar
+                Cerrar archivo
               </Button>
             </Box>
           </Box>

@@ -5,9 +5,9 @@ export const handleReconection = async (token, updateIndustrySettings) => {
     const response = await industryReconection(token);
     // Verifica si la respuesta es válida y actualiza el contexto de la API
     if (response && response.data) {
-      const optionNames = response.data.data.options.map(
+      /*const optionNames = response.data.data.options.map(
         (option) => option.short_name
-      );
+      );*/
 
       updateIndustrySettings({
         periodName: response.data.data.period.name,
@@ -24,10 +24,10 @@ export const handleReconection = async (token, updateIndustrySettings) => {
           dayStatus: response.data.data.period.day_estatus.status,
         },
         status: response.data.data.period.status,
-        industryOptions: optionNames,
+        industryOptions: response.data.data.options,
       });
 
-      console.log(optionNames);
+      //console.log(optionNames);
     } else {
       console.error("La respuesta de userReconection no es válida.");
     }

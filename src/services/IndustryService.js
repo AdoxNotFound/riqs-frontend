@@ -52,7 +52,7 @@ export const uploadWeeklyFile = async (userToken, file, setFileInfo) => {
 export const reviewAcopio = async (
   userToken,
   fileName,
-  worksheet,
+  //worksheet,
   setRows,
   setTotal
 ) => {
@@ -64,7 +64,7 @@ export const reviewAcopio = async (
     };
     const data = {
       name_file: fileName,
-      worksheet: worksheet,
+      //worksheet: worksheet,
     };
     const response = await axiosInstance.post("/industry/import-acopio", data, {
       headers,
@@ -81,6 +81,55 @@ export const reviewAcopio = async (
 
     setRows(formattedRows);
     setTotal(Number(response.data.total[0].total_tm_liquido));
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
+export const reviewPriceClosing = async (
+  userToken,
+  fileName,
+  worksheet,
+  setRows,
+  setTotal
+) => {
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: userToken,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      name_file: fileName,
+      worksheet: worksheet,
+    };
+    const response = await axiosInstance.post(
+      "/industry/import-priceclosing",
+      data,
+      {
+        headers,
+      }
+    );
+    console.log("Solicitud de revisión enviada con éxito:", response.data);
+
+    // Formatear los datos para que coincidan con el formato del Data Grid
+    const formattedRows = response.data.data.map((item, index) => ({
+      id: index + 1,
+      regimen: item.regimen,
+      date_close: item.date_close,
+      vendor_document: item.vendor_document,
+      vendor: item.vendor,
+      month_reception: item.month_reception,
+      received_tm: item.received_tm,
+      price_close_tm: item.price_close_tm,
+      amount_total_sus: item.amount_total_sus,
+    }));
+
+    setRows(formattedRows);
+    setTotal([
+      Number(response.data.total[0].total_received_tm),
+      Number(response.data.total[0].total_amount_total_sus),
+    ]);
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }

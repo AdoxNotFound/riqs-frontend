@@ -25,7 +25,7 @@ const ApiProvider = ({ children }) => {
       dayStatus: "ultimo dia",
     },
     status: "undefined",
-    industryOptions: ["option1"],
+    industryOptions: null,
     availableYears: [2022, 2023, 2024],
   });
 
