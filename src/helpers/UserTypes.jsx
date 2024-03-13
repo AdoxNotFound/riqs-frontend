@@ -65,6 +65,11 @@ export const userMenuItems = {
       to: "/line",
       icon: <TimelineOutlinedIcon />,
     },
+    {
+      title: "Configuración",
+      to: "/profile",
+      icon: <SettingsOutlinedIcon />,
+    },
   ],
   supervisor: [
     {

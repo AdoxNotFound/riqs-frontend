@@ -1,39 +1,45 @@
-import { Box, Button, TextField, Paper } from "@mui/material";
-import { Formik } from "formik";
+import { Box, Button, TextField, Paper, useTheme } from "@mui/material";
+import { Formik, Form } from "formik";
 import * as yup from "yup";
-import useMediaQuery from "@mui/material/useMediaQuery";
+//import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
+import { changePassword } from "../../services/authService";
+import { useApiContext } from "../../context/ApiContext";
+import { tokens } from "../../theme";
+import * as React from "react";
 
 const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  contact: "",
-  address1: "",
-  address2: "",
+  currentPassword: "",
+  newPassword: "",
+  confirmNewPassword: "",
 };
 
-const phoneRegExp =
-  /^((\+[1-9]{1,4}[ -]?)|(\([0-9]{2,3}\)[ -]?)|([0-9]{2,4})[ -]?)*?[0-9]{3,4}[ -]?[0-9]{3,4}$/;
-
 const userSchema = yup.object().shape({
-  firstName: yup.string().required("required"),
-  lastName: yup.string().required("required"),
-  email: yup.string().email("invalid email").required("required"),
-  contact: yup
+  currentPassword: yup.string().required("Please enter a password"),
+  newPassword: yup.string().required("Please enter a password"),
+  confirmNewPassword: yup
     .string()
-    .matches(phoneRegExp, "Phone number is not valid")
-    .required("required"),
-  address1: yup.string().required("required"),
-  address2: yup.string().required("required"),
+    .required("required")
+    .oneOf([yup.ref("newPassword")], "Passwords does not match"),
 });
 
 const AccountProfile = () => {
   //const isNonMobile = useMediaQuery("(min-width:600px)");
+  const { generalSettings } = useApiContext();
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-  const handleFormSubmit = (values) => {
-    console.log(values);
+  const handlePasswordChange = async (values, { resetForm }) => {
+    try {
+      changePassword(values, generalSettings.token);
+      resetForm();
+    } catch (error) {
+      // Handle error
+      console.error("Error al realizar la solicitud:", error);
+      //setErrors({ api: error.response.data.meta.errors[0] });
+    }
   };
+
   return (
     <Box m="20px">
       <Header
@@ -42,25 +48,20 @@ const AccountProfile = () => {
       />
 
       <Formik
-        onSubmit={handleFormSubmit}
+        onSubmit={handlePasswordChange}
         initialValues={initialValues}
         validationSchema={userSchema}
       >
-        {({
-          values,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-        }) => (
-          <form onSubmit={handleSubmit}>
+        {({ values, errors, touched, handleBlur, handleChange }) => (
+          <Form>
             <Box
               display="flex"
               flexDirection="row"
               justifyContent="space-evenly"
             >
-              <Paper sx={{ height: 300, width: 300 }}>paper example</Paper>
+              <Paper sx={{ height: 300, width: 300 }}>
+                fotografía del usuario
+              </Paper>
 
               <Box
                 display="flex"
@@ -71,48 +72,55 @@ const AccountProfile = () => {
                 <TextField
                   fullWidth
                   variant="filled"
+                  color="secondary"
                   type="text"
-                  label="Contact Number"
+                  label="Contraseña Actual"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.contact}
-                  name="contact"
-                  error={!!touched.contact && !!errors.contact}
-                  helperText={touched.contact && errors.contact}
+                  value={values.currentPassword}
+                  name="currentPassword"
+                  error={!!touched.currentPassword && !!errors.currentPassword}
+                  helperText={touched.currentPassword && errors.currentPassword}
                 />
                 <TextField
                   fullWidth
                   variant="filled"
                   type="text"
-                  label="Address 1"
+                  color="secondary"
+                  label="Contraseña Nueva"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.address1}
-                  name="address1"
-                  error={!!touched.address1 && !!errors.address1}
-                  helperText={touched.address1 && errors.address1}
+                  value={values.newPassword}
+                  name="newPassword"
+                  error={!!touched.newPassword && !!errors.newPassword}
+                  helperText={touched.newPassword && errors.newPassword}
                 />
                 <TextField
                   fullWidth
                   variant="filled"
+                  color="secondary"
                   type="text"
-                  label="Address 2"
+                  label="Confirmar Nueva Contraseña"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.address2}
-                  name="address2"
-                  error={!!touched.address2 && !!errors.address2}
-                  helperText={touched.address2 && errors.address2}
+                  value={values.confirmNewPassword}
+                  name="confirmNewPassword"
+                  error={
+                    !!touched.confirmNewPassword && !!errors.confirmNewPassword
+                  }
+                  helperText={
+                    touched.confirmNewPassword && errors.confirmNewPassword
+                  }
                 />
               </Box>
             </Box>
 
             <Box display="flex" justifyContent="end" mt="20px">
               <Button type="submit" color="secondary" variant="contained">
-                Create New User
+                Cambiar contraseña
               </Button>
             </Box>
-          </form>
+          </Form>
         )}
       </Formik>
     </Box>

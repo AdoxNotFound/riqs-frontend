@@ -129,7 +129,7 @@ const Login = () => {
                     ),
                   }}
                 />
-                {errors.api && <div style={{ color: "red" }}>{errors.api}</div>}
+                {/*errors.api && <div style={{ color: "red" }}>{errors.api}</div>*/}
                 <Button
                   type="submit"
                   fullWidth
