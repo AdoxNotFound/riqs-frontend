@@ -11,6 +11,10 @@ import { useApiContext } from "../../context/ApiContext";
 import { useNavigate } from "react-router-dom";
 import { handleLoginResponse } from "../../helpers/handleLoginResponse";
 import { userLogin } from "../../services/authService";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 const Login = () => {
   const { updateGeneralSettings } = useApiContext();
@@ -27,7 +31,7 @@ const Login = () => {
   });
 
   const handleFormSubmit = async (values, { setSubmitting, setErrors }) => {
-    console.log("Form values:", values);
+    //console.log("Form values:", values);
     try {
       const response = await userLogin(values);
       // Handle response
@@ -40,12 +44,20 @@ const Login = () => {
     setSubmitting(false);
   };
 
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
           sx={{
-            my: 8,
+            my: 6,
             mx: 4,
             display: "flex",
             flexDirection: "column",
@@ -60,7 +72,7 @@ const Login = () => {
               margin: "10px",
             }}
           >
-            <img src="/green_logo.svg" alt="RIQS logo" width={150} />
+            <img src="/green_logo.svg" alt="RIQS logo" width={130} />
             <Typography variant="h2">RIQS</Typography>
           </Box>
 
@@ -95,13 +107,27 @@ const Login = () => {
                   fullWidth
                   name="password"
                   label="Contraseña"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
                   autoComplete="current-password"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   error={!!touched.password && !!errors.password}
                   helperText={touched.password && errors.password}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
                 {errors.api && <div style={{ color: "red" }}>{errors.api}</div>}
                 <Button

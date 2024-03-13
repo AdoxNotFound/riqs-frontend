@@ -9,10 +9,10 @@ import Bar from "../scenes/bar";
 import Form from "../scenes/form";
 import Line from "../scenes/line";
 import Pie from "../scenes/pie";
-import FAQ from "../scenes/faq";
 import Calendar from "../scenes/calendar";
 import Login from "../scenes/login";
 import UploadFile from "../scenes/uploadFile/index";
+import AccountProfile from "../scenes/profile";
 
 export const router = createBrowserRouter([
   {
@@ -54,11 +54,6 @@ export const router = createBrowserRouter([
         children: [{ index: true, element: <Calendar /> }],
       },
       {
-        path: "faq",
-        element: <MainLayout />,
-        children: [{ index: true, element: <FAQ /> }],
-      },
-      {
         path: "bar",
         element: <MainLayout />,
         children: [{ index: true, element: <Bar /> }],
@@ -77,6 +72,11 @@ export const router = createBrowserRouter([
         path: "upload-file",
         element: <MainLayout />,
         children: [{ index: true, element: <UploadFile /> }],
+      },
+      {
+        path: "profile",
+        element: <MainLayout />,
+        children: [{ index: true, element: <AccountProfile /> }],
       },
     ],
   },

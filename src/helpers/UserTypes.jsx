@@ -1,17 +1,14 @@
-//import SettingsIcon from "@mui/icons-material/SettingsRounded";
 //import ReportsIcon from "@mui/icons-material/DescriptionRounded";
 //import CorrectionsIcon from "@mui/icons-material/ReportRounded";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-import PeopleOutlinedIcon from "@mui/icons-material/PeopleOutlined";
 import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
-//import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
+import ReceiptOutlinedIcon from "@mui/icons-material/ReceiptOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 //import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-//import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import PieChartOutlineOutlinedIcon from "@mui/icons-material/PieChartOutlineOutlined";
 import TimelineOutlinedIcon from "@mui/icons-material/TimelineOutlined";
-//import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
 export const UserTypes = [
   "administrador",
@@ -37,7 +34,7 @@ export const userMenuItems = {
       icon: <HomeOutlinedIcon />,
     },
     {
-      title: "Administración",
+      title: "Contacts",
       to: "/contacts",
       icon: <ContactsOutlinedIcon />,
     },
@@ -45,6 +42,16 @@ export const userMenuItems = {
       title: "Profile Form",
       to: "/form",
       icon: <PersonOutlinedIcon />,
+    },
+    {
+      title: "Invoices Balances",
+      to: "/invoices",
+      icon: <ReceiptOutlinedIcon />,
+    },
+    {
+      title: "Configuración",
+      to: "/profile",
+      icon: <SettingsOutlinedIcon />,
     },
   ],
   industria: [
@@ -57,11 +64,6 @@ export const userMenuItems = {
       title: "Line Chart",
       to: "/line",
       icon: <TimelineOutlinedIcon />,
-    },
-    {
-      title: "Administración",
-      to: "/team",
-      icon: <PeopleOutlinedIcon />,
     },
   ],
   supervisor: [
@@ -100,13 +102,11 @@ export const userMenuItems = {
 /* Original template routes, pages and titles
 
 title: "Dashboard", to: "/home", icon: <HomeOutlinedIcon />,
-title: "Logout", to: "/", icon: <LogoutOutlinedIcon />,
 title: "Manage Team", to: "/team", icon: <PeopleOutlinedIcon />
 title: "Contacts Information", to: "/contacts", icon: <ContactsOutlinedIcon />,
 title: "Invoices Balances", to: "/invoices", icon: <ReceiptOutlinedIcon />,
 title: "Profile Form", to: "/form", icon: <PersonOutlinedIcon />,
 title: "Calendar", to: "/calendar", icon: <CalendarTodayOutlinedIcon />,
-title: "FAQ Page", to: "/faq", icon: <HelpOutlineOutlinedIcon />,
 title: "Bar Chart", to: "/bar", icon: <BarChartOutlinedIcon />,
 title: "Pie Chart", to: "/pie", icon: <PieChartOutlineOutlinedIcon />,
 title: "Line Chart", to: "/line", icon: <TimelineOutlinedIcon />,
