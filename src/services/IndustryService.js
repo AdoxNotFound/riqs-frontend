@@ -23,6 +23,19 @@ export const industryReconection = async (userToken) => {
   }
 };
 
+export const industrySettings = async (userToken) => {
+  try {
+    const response = await axiosInstance.get("/industry/settings", {
+      headers: {
+        Authorization: userToken,
+      },
+    });
+    return response;
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
 export const uploadWeeklyFile = async (userToken, file, setFileInfo) => {
   const formData = new FormData();
   formData.append("file", file);
@@ -130,6 +143,26 @@ export const reviewPriceClosing = async (
       Number(response.data.total[0].total_received_tm),
       Number(response.data.total[0].total_amount_total_sus),
     ]);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
+// /industry/save-stock
+export const saveProductStocks = async (userToken, productList) => {
+  try {
+    const headers = {
+      Accept: "application/json",
+      Authorization: userToken,
+      "Content-Type": "application/json",
+    };
+    const data = {
+      stocks: productList,
+    };
+    const response = await axiosInstance.post("/industry/save-stock", data, {
+      headers,
+    });
+    console.log(response.data);
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }

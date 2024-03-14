@@ -1,12 +1,21 @@
-import { Box, Button, TextField, Paper, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  TextField,
+  IconButton,
+  Paper,
+  useTheme,
+} from "@mui/material";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
 //import useMediaQuery from "@mui/material/useMediaQuery";
 import Header from "../../components/Header";
 import { changePassword } from "../../services/authService";
 import { useApiContext } from "../../context/ApiContext";
-import { tokens } from "../../theme";
-import * as React from "react";
+import { ColorModeContext, tokens } from "../../theme";
+import React, { useContext } from "react";
+import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 
 const initialValues = {
   currentPassword: "",
@@ -28,6 +37,7 @@ const AccountProfile = () => {
   const { generalSettings } = useApiContext();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const colorMode = useContext(ColorModeContext);
 
   const handlePasswordChange = async (values, { resetForm }) => {
     try {
@@ -123,6 +133,15 @@ const AccountProfile = () => {
           </Form>
         )}
       </Formik>
+      <Box display="flex">
+        <IconButton onClick={colorMode.tooggleColorMode}>
+          {theme.palette.mode === "dark" ? (
+            <DarkModeOutlinedIcon />
+          ) : (
+            <LightModeOutlinedIcon />
+          )}
+        </IconButton>
+      </Box>
     </Box>
   );
 };

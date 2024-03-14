@@ -14,10 +14,13 @@ import Header from "../../components/Header";
 import { useApiContext } from "../../context/ApiContext";
 import { tokens } from "../../theme";
 //import { uploadData } from "../../data/uploadData";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { uploadWeeklyFile } from "../../services/IndustryService";
+import {
+  uploadWeeklyFile,
+  industrySettings,
+} from "../../services/IndustryService";
 import ResponsiveDialog from "./UploadDialog";
 
 // las lineas comentadas son para utilizar el selector de paginas de excel, si es que se llegará a utilizar más adelante
@@ -35,15 +38,30 @@ const VisuallyHiddenInput = styled("input")({
 });
 
 const UploadFile = () => {
-  const { industrySettings, generalSettings } = useApiContext();
+  const { generalSettings } = useApiContext();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-
   const [open, setOpen] = React.useState(false);
   const [selectedReport, setSelectedReport] = React.useState({});
-
   const [fileInfo, setFileInfo] = useState(null);
   //const [selectedSheets, setSelectedSheets] = useState({});
+  const [industryData, setIndustryData] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await industrySettings(generalSettings.token);
+        setIndustryData(response.data.data); // Guardamos los datos en el estado local
+      } catch (error) {
+        console.error(
+          "Error al obtener la configuración de la industria:",
+          error
+        );
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
 
@@ -52,7 +70,7 @@ const UploadFile = () => {
     uploadWeeklyFile(generalSettings.token, file, setFileInfo);
 
     const initialSelectedSheets = {};
-    industrySettings.industryOptions.forEach((row) => {
+    industryData.options.forEach((row) => {
       initialSelectedSheets[row.id] = "";
     });
     //setSelectedSheets(initialSelectedSheets);
@@ -72,7 +90,7 @@ const UploadFile = () => {
       <Box m="20px">
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Header
-            title={industrySettings.periodName}
+            title={industryData ? industryData.period.name : ""}
             subtitle="Subir reporte quincenal"
           />
         </Box>
@@ -93,7 +111,7 @@ const UploadFile = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {industrySettings.industryOptions.map((row) => (
+                  {industryData.options.map((row) => (
                     <TableRow key={row.id}>
                       {renderTableCell(row.id)}
                       {renderTableCell(row.name)}
@@ -162,6 +180,7 @@ const UploadFile = () => {
         handleClose={handleClose}
         fileInfo={fileInfo}
         rowName={selectedReport}
+        products={industryData ? industryData.products : []}
       />
     </React.Fragment>
   );

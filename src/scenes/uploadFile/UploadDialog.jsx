@@ -20,33 +20,18 @@ import { useApiContext } from "../../context/ApiContext";
 import { DataGrid } from "@mui/x-data-grid";
 import { rowConfig } from "./DialogColumns";
 import { tokens } from "../../theme";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 import * as yup from "yup";
+import { saveProductStocks } from "../../services/IndustryService";
 
 // las lineas comentadas son para utilizar el selector de paginas de excel, si es que se llegará a utilizar más adelante
-const initialValues = {
-  hss: "",
-  his: "",
-  cs: "",
-  acs: "",
-  ars: "",
-  exp: "",
-};
-
-const userSchema = yup.object().shape({
-  hss: yup.number().required("required"),
-  his: yup.number().required("required"),
-  cs: yup.number().required("required"),
-  acs: yup.number().required("required"),
-  ars: yup.number().required("required"),
-  exp: yup.number().required("required"),
-});
 
 export default function ResponsiveDialog({
   open,
   handleClose,
   fileInfo,
   rowName,
+  products,
 }) {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
@@ -57,8 +42,33 @@ export default function ResponsiveDialog({
   const [total, setTotal] = useState(0);
   const [checked, setChecked] = useState(true);
 
+  const initialValues = {};
+  const validationSchemaFields = {};
+
+  products.forEach((product) => {
+    initialValues[product.short_name] = "";
+    validationSchemaFields[product.short_name] = yup
+      .number()
+      .required("Required");
+  });
+
+  const userSchema = yup.object().shape(validationSchemaFields);
+
   const handleFormSubmit = (values) => {
-    console.log(values);
+    const stocks = products.map((product) => ({
+      product_id: product.id,
+      tm: values[product.short_name],
+    }));
+    console.log(stocks);
+    try {
+      saveProductStocks(generalSettings.token, stocks);
+      console.log("se subio con exito");
+    } catch (error) {
+      console.error(
+        "Error al obtener la configuración de la industria:",
+        error
+      );
+    }
   };
   /*
   const handleSheetChange = (event) => {
@@ -211,94 +221,34 @@ export default function ResponsiveDialog({
               validationSchema={userSchema}
               onSubmit={handleFormSubmit}
             >
-              {({
-                values,
-                errors,
-                touched,
-                handleBlur,
-                handleChange,
-                handleSubmit,
-              }) => (
-                <form onSubmit={handleSubmit}>
-                  <Box display="flex" flexDirection="column">
+              {({ values, errors, touched, handleBlur, handleChange }) => (
+                <Form>
+                  {products.map((product) => (
                     <TextField
-                      label="Harina de soya solvente"
+                      key={product.id}
+                      label={product.name}
                       type="text"
                       onBlur={handleBlur}
                       onChange={handleChange}
-                      error={!!touched.hss && !!errors.hss}
-                      helperText={touched.hss && errors.hss}
-                      value={values.hss}
+                      error={
+                        !!touched[product.short_name] &&
+                        !!errors[product.short_name]
+                      }
+                      helperText={
+                        touched[product.short_name] &&
+                        errors[product.short_name]
+                      }
+                      value={values[product.short_name]}
                       color="secondary"
-                      name="hss"
+                      name={product.short_name}
                       sx={{ m: 2 }}
                     />
-                    <TextField
-                      label="Harina integral de soya"
-                      type="text"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={!!touched.his && !!errors.his}
-                      helperText={touched.his && errors.his}
-                      value={values.his}
-                      color="secondary"
-                      name="his"
-                      sx={{ m: 2 }}
-                    />
-                    <TextField
-                      label="Cascarilla de soya"
-                      type="text"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={!!touched.cs && !!errors.cs}
-                      helperText={touched.cs && errors.cs}
-                      value={values.cs}
-                      color="secondary"
-                      name="cs"
-                      sx={{ m: 2 }}
-                    />
-                    <TextField
-                      label="Aceite crudo de soya"
-                      type="text"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={!!touched.acs && !!errors.acs}
-                      helperText={touched.acs && errors.acs}
-                      value={values.acs}
-                      color="secondary"
-                      name="acs"
-                      sx={{ m: 2 }}
-                    />
-                    <TextField
-                      label="Aceite refinado de soya"
-                      type="text"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={!!touched.ars && !!errors.ars}
-                      helperText={touched.ars && errors.ars}
-                      value={values.ars}
-                      color="secondary"
-                      name="ars"
-                      sx={{ m: 2 }}
-                    />
-                    <TextField
-                      label="Expeller de soya"
-                      type="text"
-                      onBlur={handleBlur}
-                      onChange={handleChange}
-                      error={!!touched.exp && !!errors.exp}
-                      helperText={touched.exp && errors.exp}
-                      value={values.exp}
-                      color="secondary"
-                      name="exp"
-                      sx={{ m: 2 }}
-                    />
+                  ))}
 
-                    <Button type="submit" color="secondary" variant="contained">
-                      Create New User
-                    </Button>
-                  </Box>
-                </form>
+                  <Button type="submit" color="secondary" variant="contained">
+                    Create New User
+                  </Button>
+                </Form>
               )}
             </Formik>
           )

@@ -1,5 +1,5 @@
 import React from "react";
-import Topbar from "../../scenes/global/Topbar";
+// import Topbar from "../../scenes/global/Topbar";
 import Sidebar from "../../scenes/global/Sidebar";
 import { Outlet } from "react-router-dom";
 import { useApiContext } from "../../context/ApiContext";
@@ -18,7 +18,7 @@ const MainLayout = () => {
       {/* sidebar */}
       <Sidebar />
       <main className="content">
-        <Topbar />
+        {/* <Topbar /> */}
         <Outlet />
       </main>
     </div>
