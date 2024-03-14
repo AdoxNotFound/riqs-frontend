@@ -12,7 +12,7 @@ import * as yup from "yup";
 import Header from "../../components/Header";
 import { changePassword } from "../../services/authService";
 import { useApiContext } from "../../context/ApiContext";
-import { ColorModeContext, tokens } from "../../theme";
+import { ColorModeContext /*tokens */ } from "../../theme";
 import React, { useContext } from "react";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -36,7 +36,7 @@ const AccountProfile = () => {
   //const isNonMobile = useMediaQuery("(min-width:600px)");
   const { generalSettings } = useApiContext();
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  //const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
   const handlePasswordChange = async (values, { resetForm }) => {

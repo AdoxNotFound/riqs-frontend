@@ -23,7 +23,7 @@ export const industryReconection = async (userToken) => {
   }
 };
 
-export const industrySettings = async (userToken) => {
+export const getIndustrySettings = async (userToken) => {
   try {
     const response = await axiosInstance.get("/industry/settings", {
       headers: {
@@ -53,7 +53,7 @@ export const uploadWeeklyFile = async (userToken, file, setFileInfo) => {
       config
     );
 
-    console.log("Archivo enviado correctamente:", response.data);
+    //console.log("Archivo enviado correctamente:", response.data);
     setFileInfo(response.data);
     return response.data;
   } catch (error) {
@@ -71,9 +71,7 @@ export const reviewAcopio = async (
 ) => {
   try {
     const headers = {
-      Accept: "application/json",
       Authorization: userToken,
-      "Content-Type": "application/json",
     };
     const data = {
       name_file: fileName,
@@ -82,7 +80,7 @@ export const reviewAcopio = async (
     const response = await axiosInstance.post("/industry/import-acopio", data, {
       headers,
     });
-    console.log("Solicitud de revisión enviada con éxito:", response.data);
+    //console.log("Solicitud de revisión enviada con éxito:", response.data);
 
     // Formatear los datos para que coincidan con el formato del Data Grid
     const formattedRows = response.data.data.map((item, index) => ({
@@ -108,9 +106,7 @@ export const reviewPriceClosing = async (
 ) => {
   try {
     const headers = {
-      Accept: "application/json",
       Authorization: userToken,
-      "Content-Type": "application/json",
     };
     const data = {
       name_file: fileName,
@@ -123,7 +119,7 @@ export const reviewPriceClosing = async (
         headers,
       }
     );
-    console.log("Solicitud de revisión enviada con éxito:", response.data);
+    //console.log("Solicitud de revisión enviada con éxito:", response.data);
 
     // Formatear los datos para que coincidan con el formato del Data Grid
     const formattedRows = response.data.data.map((item, index) => ({
@@ -152,17 +148,48 @@ export const reviewPriceClosing = async (
 export const saveProductStocks = async (userToken, productList) => {
   try {
     const headers = {
-      Accept: "application/json",
       Authorization: userToken,
-      "Content-Type": "application/json",
     };
     const data = {
       stocks: productList,
     };
-    const response = await axiosInstance.post("/industry/save-stock", data, {
+    await axiosInstance.post("/industry/save-stock", data, {
       headers,
     });
-    console.log(response.data);
+    //console.log(response.data);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
+export const saveEmptyPeriod = async (userToken) => {
+  try {
+    const headers = {
+      Authorization: userToken,
+    };
+
+    await axiosInstance.post("/industry/save-not-transaction-all", null, {
+      headers,
+    });
+    //console.log(response.data);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
+export const saveEmptyOption = async (userToken, option) => {
+  try {
+    const headers = {
+      Authorization: userToken,
+    };
+
+    const data = {
+      option_type: option,
+    };
+
+    await axiosInstance.post("/industry/save-not-transaction", data, {
+      headers,
+    });
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }

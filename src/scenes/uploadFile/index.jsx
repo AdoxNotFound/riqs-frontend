@@ -1,25 +1,24 @@
-import {
-  Box,
-  Button,
-  useTheme,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Typography,
-} from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { useTheme } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
 import Header from "../../components/Header";
 import { useApiContext } from "../../context/ApiContext";
 import { tokens } from "../../theme";
-//import { uploadData } from "../../data/uploadData";
 import React, { useState, useEffect } from "react";
 import { styled } from "@mui/material/styles";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import {
   uploadWeeklyFile,
-  industrySettings,
+  getIndustrySettings,
+  saveEmptyPeriod,
 } from "../../services/IndustryService";
 import ResponsiveDialog from "./UploadDialog";
 
@@ -50,7 +49,7 @@ const UploadFile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await industrySettings(generalSettings.token);
+        const response = await getIndustrySettings(generalSettings.token);
         setIndustryData(response.data.data); // Guardamos los datos en el estado local
       } catch (error) {
         console.error(
@@ -61,7 +60,7 @@ const UploadFile = () => {
     };
 
     fetchData();
-  }, []);
+  }, [generalSettings.token]);
 
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
 
@@ -83,6 +82,32 @@ const UploadFile = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleSaveEmptyPeriod = async () => {
+    saveEmptyPeriod(generalSettings.token);
+    handleCloseModal();
+  };
+
+  const [openModal, setOpenModal] = React.useState(false);
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+  const style = {
+    position: "absolute",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    width: 400,
+    bgcolor: colors.primary[400],
+    border: "2px solid #000",
+    boxShadow: 24,
+    pt: 2,
+    px: 4,
+    pb: 3,
   };
 
   return (
@@ -154,7 +179,7 @@ const UploadFile = () => {
             height={400}
             flexDirection="column"
           >
-            <Typography variant="h4">Suba un archivo para continuar</Typography>
+            <Typography variant="h5">Suba un archivo para continuar</Typography>
             <Button
               component="label"
               role={undefined}
@@ -172,6 +197,38 @@ const UploadFile = () => {
               Subir archivo
               <VisuallyHiddenInput type="file" onChange={handleFileChange} />
             </Button>
+            <Typography variant="h5">Declarar sin movimiento</Typography>
+            <div>
+              <Button
+                component="label"
+                variant="contained"
+                color="error"
+                onClick={handleOpenModal}
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "bold",
+                  padding: "10px 20px",
+                }}
+              >
+                Declarar quincena sin movimiento
+              </Button>
+              <Modal open={openModal} onClose={handleCloseModal}>
+                <Box sx={{ ...style, width: 400 }}>
+                  <p id="child-modal-description">
+                    Esta seguro de declarar sin movimiento esta planilla?
+                  </p>
+                  <Button onClick={handleCloseModal} color="error">
+                    Cancelar
+                  </Button>
+                  <Button
+                    onClick={() => handleSaveEmptyPeriod()}
+                    color="secondary"
+                  >
+                    Continuar
+                  </Button>
+                </Box>
+              </Modal>
+            </div>
           </Box>
         )}
       </Box>
