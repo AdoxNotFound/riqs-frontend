@@ -162,6 +162,24 @@ export const saveProductStocks = async (userToken, productList) => {
   }
 };
 
+// /industry/save-production
+export const saveProduction = async (userToken, productList) => {
+  try {
+    const headers = {
+      Authorization: userToken,
+    };
+    const data = {
+      stocks: productList,
+    };
+    await axiosInstance.post("/industry/save-production", data, {
+      headers,
+    });
+    //console.log(response.data);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
 export const saveEmptyPeriod = async (userToken) => {
   try {
     const headers = {

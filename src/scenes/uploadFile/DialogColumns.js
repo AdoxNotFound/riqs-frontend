@@ -87,55 +87,21 @@ export const rowConfig = {
   production: {
     simpleDialog: false,
     reviewFunction: reviewAcopio,
-    columns: [
-      { field: "id", headerName: "ID", width: 50, sortable: false },
-      {
-        field: "date_reception",
-        headerName: "Fecha de Recepción",
-        width: 180,
-        sortable: false,
-      },
-      {
-        field: "resume_tm_bruto",
-        headerName: "Resumen TM Bruto",
-        width: 180,
-        type: "number",
-        sortable: false,
-      },
-      {
-        field: "resume_tm_liquido",
-        headerName: "Resumen TM Líquido",
-        width: 180,
-        type: "number",
-        sortable: false,
-      },
-    ],
+    columns: [{ field: "id", headerName: "ID", width: 50, sortable: false }],
   },
   stock: {
     simpleDialog: false,
     reviewFunction: reviewAcopio,
-    columns: [
-      { field: "id", headerName: "ID", width: 50, sortable: false },
-      {
-        field: "date_reception",
-        headerName: "Fecha de Recepción",
-        width: 180,
-        sortable: false,
-      },
-      {
-        field: "resume_tm_bruto",
-        headerName: "Resumen TM Bruto",
-        width: 180,
-        type: "number",
-        sortable: false,
-      },
-      {
-        field: "resume_tm_liquido",
-        headerName: "Resumen TM Líquido",
-        width: 180,
-        type: "number",
-        sortable: false,
-      },
-    ],
+    columns: [{ field: "id", headerName: "ID", width: 50, sortable: false }],
   },
+
+  /*
+  falta:
+  -hss
+  -his
+  -cs
+  -acs
+  -ars
+  -exp
+  */
 };

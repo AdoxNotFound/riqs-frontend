@@ -5,6 +5,7 @@ import {
   IconButton,
   Paper,
   useTheme,
+  Typography,
 } from "@mui/material";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
@@ -12,7 +13,7 @@ import * as yup from "yup";
 import Header from "../../components/Header";
 import { changePassword } from "../../services/authService";
 import { useApiContext } from "../../context/ApiContext";
-import { ColorModeContext /*tokens */ } from "../../theme";
+import { ColorModeContext, tokens } from "../../theme";
 import React, { useContext } from "react";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -24,19 +25,19 @@ const initialValues = {
 };
 
 const userSchema = yup.object().shape({
-  currentPassword: yup.string().required("Please enter a password"),
-  newPassword: yup.string().required("Please enter a password"),
+  currentPassword: yup.string().required("Este campo es obligatorio"),
+  newPassword: yup.string().required("Este campo es obligatorio"),
   confirmNewPassword: yup
     .string()
-    .required("required")
-    .oneOf([yup.ref("newPassword")], "Passwords does not match"),
+    .required("Este campo es obligatorio")
+    .oneOf([yup.ref("newPassword")], "Las contraseñas no coinciden"),
 });
 
 const AccountProfile = () => {
   //const isNonMobile = useMediaQuery("(min-width:600px)");
   const { generalSettings } = useApiContext();
   const theme = useTheme();
-  //const colors = tokens(theme.palette.mode);
+  const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
 
   const handlePasswordChange = async (values, { resetForm }) => {
@@ -76,59 +77,85 @@ const AccountProfile = () => {
               <Box
                 display="flex"
                 flexDirection="column"
-                justifyContent="space-evenly"
-                height={300}
+                width={300}
+                backgroundColor={colors.primary[400]}
+                alignItems="center"
               >
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  color="secondary"
-                  type="text"
-                  label="Contraseña Actual"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.currentPassword}
-                  name="currentPassword"
-                  error={!!touched.currentPassword && !!errors.currentPassword}
-                  helperText={touched.currentPassword && errors.currentPassword}
-                />
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  type="text"
-                  color="secondary"
-                  label="Contraseña Nueva"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.newPassword}
-                  name="newPassword"
-                  error={!!touched.newPassword && !!errors.newPassword}
-                  helperText={touched.newPassword && errors.newPassword}
-                />
-                <TextField
-                  fullWidth
-                  variant="filled"
-                  color="secondary"
-                  type="text"
-                  label="Confirmar Nueva Contraseña"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.confirmNewPassword}
-                  name="confirmNewPassword"
-                  error={
-                    !!touched.confirmNewPassword && !!errors.confirmNewPassword
-                  }
-                  helperText={
-                    touched.confirmNewPassword && errors.confirmNewPassword
-                  }
-                />
-              </Box>
-            </Box>
+                <Box
+                  display="flex"
+                  justifyContent="start"
+                  mt="20px"
+                  width={250}
+                >
+                  <Typography variant="h6">Cambio de contraseña</Typography>
+                </Box>
 
-            <Box display="flex" justifyContent="end" mt="20px">
-              <Button type="submit" color="secondary" variant="contained">
-                Cambiar contraseña
-              </Button>
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="space-evenly"
+                  height={300}
+                  width={250}
+                >
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    color="secondary"
+                    type="text"
+                    label="Contraseña Actual"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.currentPassword}
+                    name="currentPassword"
+                    error={
+                      !!touched.currentPassword && !!errors.currentPassword
+                    }
+                    helperText={
+                      touched.currentPassword && errors.currentPassword
+                    }
+                  />
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    color="secondary"
+                    label="Contraseña Nueva"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.newPassword}
+                    name="newPassword"
+                    error={!!touched.newPassword && !!errors.newPassword}
+                    helperText={touched.newPassword && errors.newPassword}
+                  />
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    color="secondary"
+                    type="text"
+                    label="Confirmar Nueva Contraseña"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.confirmNewPassword}
+                    name="confirmNewPassword"
+                    error={
+                      !!touched.confirmNewPassword &&
+                      !!errors.confirmNewPassword
+                    }
+                    helperText={
+                      touched.confirmNewPassword && errors.confirmNewPassword
+                    }
+                  />
+                </Box>
+
+                <Button
+                  type="submit"
+                  color="secondary"
+                  variant="contained"
+                  sx={{ mb: 2 }}
+                >
+                  Cambiar contraseña
+                </Button>
+              </Box>
             </Box>
           </Form>
         )}

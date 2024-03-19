@@ -50,7 +50,7 @@ const LineChart = ({ isCustomLineColors = false, isDashboard = false }) => {
     ? lineData.filter((entry) => entry.id === selectedId)
     : lineData;
 
-  console.log(filteredData);
+  //console.log(filteredData);
 
   return (
     <Box>

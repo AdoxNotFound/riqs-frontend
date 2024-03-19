@@ -1,18 +1,35 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form } from "formik";
 import * as yup from "yup";
-import { saveProductStocks } from "../../services/IndustryService";
+import {
+  saveProductStocks,
+  saveProduction,
+} from "../../services/IndustryService";
 import { useApiContext } from "../../context/ApiContext";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 
-const StockForm = ({ products, handleClose }) => {
+const StockForm = ({ products, handleClose, shortName }) => {
   const { generalSettings } = useApiContext();
+  const [filteredProducts, setFilteredProducts] = useState([]);
   const initialValues = {};
   const validationSchemaFields = {};
 
-  products.forEach((product) => {
+  useEffect(() => {
+    // Filtrar productos según el valor de shortName
+    let tempProducts;
+    if (shortName === "stock") {
+      tempProducts = products.filter((product) => product.for_stock === 1);
+    } else if (shortName === "production") {
+      tempProducts = products.filter(
+        (product, index) => product.for_production === 1 && index !== 0
+      );
+    }
+    setFilteredProducts(tempProducts || []);
+  }, [products, shortName]);
+
+  filteredProducts.forEach((product) => {
     initialValues[product.short_name] = "";
     validationSchemaFields[product.short_name] = yup
       .number()
@@ -22,14 +39,18 @@ const StockForm = ({ products, handleClose }) => {
   const userSchema = yup.object().shape(validationSchemaFields);
 
   const handleFormSubmit = async (values) => {
-    const stocks = products.map((product) => ({
+    const stocks = filteredProducts.map((product) => ({
       product_id: product.id,
       tm: values[product.short_name],
     }));
     console.log(stocks);
     try {
-      await saveProductStocks(generalSettings.token, stocks);
-      console.log("se subio con exito");
+      if (shortName === "stock") {
+        await saveProductStocks(generalSettings.token, stocks);
+      } else {
+        await saveProduction(generalSettings.token, stocks);
+      }
+      //console.log("se subio con exito");
       handleClose();
     } catch (error) {
       console.error(
@@ -48,7 +69,7 @@ const StockForm = ({ products, handleClose }) => {
       {({ values, errors, touched, handleBlur, handleChange }) => (
         <Form>
           <Box display="flex" flexDirection="column" alignItems="center">
-            {products.map((product) => (
+            {filteredProducts.map((product) => (
               <TextField
                 key={product.id}
                 label={product.name}

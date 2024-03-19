@@ -60,7 +60,7 @@ const UploadFile = () => {
     };
 
     fetchData();
-  }, [generalSettings.token]);
+  }, [generalSettings.token, open]);
 
   const renderTableCell = (value) => <TableCell>{value}</TableCell>;
 
@@ -146,12 +146,13 @@ const UploadFile = () => {
                           variant="outlined"
                           color="secondary"
                           size="small"
+                          disabled={row.date ? true : false}
                           onClick={() => handleClickOpen(row)}
                         >
                           Revisar
                         </Button>
                       </TableCell>
-                      {renderTableCell(row.route)}
+                      {renderTableCell(row.date ? "Declarado" : "Pendiente")}
                     </TableRow>
                   ))}
                 </TableBody>

@@ -128,7 +128,11 @@ export default function ResponsiveDialog({
               handleClose={handleClose}
             />
           ) : (
-            <StockForm products={products} handleClose={handleClose} />
+            <StockForm
+              products={products}
+              handleClose={handleClose}
+              shortName={rowName.short_name}
+            />
           )
         ) : (
           <div>

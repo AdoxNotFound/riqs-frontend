@@ -7,12 +7,12 @@ export const setupRequestInterceptor = (
 ) => {
   return axiosInstance.interceptors.request.use(
     (request) => {
-      //console.log("Starting Request", request);
+      console.log("Starting Request", request);
       setLoading(true);
       return request;
     },
     (error) => {
-      //console.error("Axios Request Error:", error);
+      console.error("Axios Request Error:", error);
       setErrorMessage("No hay respuesta del servidor");
       setErrorSnackbarOpen(true);
       setLoading(false);
@@ -30,7 +30,7 @@ export const setupResponseInterceptor = (
 ) => {
   return axiosInstance.interceptors.response.use(
     (response) => {
-      //console.log("Response:", response);
+      console.log("Response:", response);
       if (typeof response.data.data[0] === "string") {
         setSuccessMessage(response.data.data[0]);
       } else {
@@ -42,7 +42,7 @@ export const setupResponseInterceptor = (
       return response;
     },
     (error) => {
-      //console.error("Axios Response Error:", error);
+      console.error("Axios Response Error:", error);
       setErrorMessage(
         error.response.data.meta.errors[0] || "Error desconocido"
       );
