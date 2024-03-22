@@ -68,7 +68,7 @@ export default function ResponsiveDialog({
     try {
       console.log(rowName.short_name);
       await saveEmptyOption(generalSettings.token, rowName.short_name);
-      //console.log("se subio con exito");
+      //console.log("se subió con éxito");
       handleCloseModal();
       handleClose();
     } catch (error) {

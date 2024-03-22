@@ -1,12 +1,12 @@
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
-import { useTheme, Box } from "@mui/material";
+import { Box } from "@mui/material";
 import Header from "../../components/Header";
-import { tokens } from "../../theme";
+//import { tokens } from "../../theme";
 
 const Calendar = () => {
-  const theme = useTheme();
-  const colors = tokens(theme.palette.mode);
+  //const theme = useTheme();
+  //const colors = tokens(theme.palette.mode);
 
   // Fechas a resaltar
   const highlightedDates = [

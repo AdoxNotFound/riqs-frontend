@@ -1,8 +1,8 @@
-import { industryReconection } from "../services/IndustryService";
+import { industryReconnection } from "../services/IndustryService";
 
-export const handleReconection = async (token, updateIndustrySettings) => {
+export const handleReconnection = async (token, updateIndustrySettings) => {
   try {
-    const response = await industryReconection(token);
+    const response = await industryReconnection(token);
     // Verifica si la respuesta es válida y actualiza el contexto de la API
     if (response && response.data) {
       /*const optionNames = response.data.data.options.map(
@@ -29,9 +29,9 @@ export const handleReconection = async (token, updateIndustrySettings) => {
 
       //console.log(optionNames);
     } else {
-      console.error("La respuesta de userReconection no es válida.");
+      console.error("La respuesta de userReconnection no es válida.");
     }
   } catch (error) {
-    console.error("Error al realizar la solicitud de userReconection:", error);
+    console.error("Error al realizar la solicitud de userReconnection:", error);
   }
 };

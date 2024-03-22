@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-export const industryReconection = async (userToken) => {
+export const industryReconnection = async (userToken) => {
   try {
     const response = await axiosInstance.get("/auth/reconection", {
       headers: {
@@ -11,10 +11,10 @@ export const industryReconection = async (userToken) => {
   } catch (error) {
     // Verifica si el error es debido a un límite de solicitudes (status 429)
     if (error.response && error.response.status === 429) {
-      // Espera un tiempo antes de reintentar
-      await new Promise((resolve) => setTimeout(resolve, 5000)); // Espera 5 segundos antes de reintentar
-      // Reintenta la solicitud
-      return industryReconection(userToken);
+      // Espera un tiempo antes de volver intentar conectar con la api
+      await new Promise((resolve) => setTimeout(resolve, 5000)); // Espera 5 segundos antes de volver a intentar
+      // Vuelve a intentar la solicitud
+      return industryReconnection(userToken);
     } else {
       // Si no es un error de límite de solicitudes, relanza el error
       console.error("Error al realizar la solicitud Axios:", error);
@@ -67,7 +67,8 @@ export const reviewAcopio = async (
   fileName,
   //worksheet,
   setRows,
-  setTotal
+  setTotal,
+  setBatch
 ) => {
   try {
     const headers = {
@@ -92,6 +93,24 @@ export const reviewAcopio = async (
 
     setRows(formattedRows);
     setTotal(Number(response.data.total[0].total_tm_liquido));
+    setBatch(response.data.batch);
+  } catch (error) {
+    console.error("Error al enviar la solicitud de revisión:", error);
+  }
+};
+
+export const saveAcopio = async (userToken, batch) => {
+  try {
+    const headers = {
+      Authorization: userToken,
+    };
+    const data = {
+      batch: batch,
+    };
+    await axiosInstance.post("/industry/save-acopio", data, {
+      headers,
+    });
+    //console.log(response.data);
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }
@@ -102,7 +121,8 @@ export const reviewPriceClosing = async (
   fileName,
   worksheet,
   setRows,
-  setTotal
+  setTotal,
+  setBatch
 ) => {
   try {
     const headers = {
@@ -139,6 +159,7 @@ export const reviewPriceClosing = async (
       Number(response.data.total[0].total_received_tm),
       Number(response.data.total[0].total_amount_total_sus),
     ]);
+    setBatch(response.data.batch);
   } catch (error) {
     console.error("Error al enviar la solicitud de revisión:", error);
   }

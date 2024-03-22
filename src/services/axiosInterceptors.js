@@ -34,7 +34,7 @@ export const setupResponseInterceptor = (
       if (typeof response.data.data[0] === "string") {
         setSuccessMessage(response.data.data[0]);
       } else {
-        setSuccessMessage("Acceso con exito");
+        setSuccessMessage("Acceso con éxito");
       }
 
       setSuccessSnackbarOpen(true);

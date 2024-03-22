@@ -50,7 +50,7 @@ const StockForm = ({ products, handleClose, shortName }) => {
       } else {
         await saveProduction(generalSettings.token, stocks);
       }
-      //console.log("se subio con exito");
+      //console.log("se subió con éxito");
       handleClose();
     } catch (error) {
       console.error(

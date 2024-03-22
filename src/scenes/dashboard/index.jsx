@@ -14,7 +14,7 @@ import IndustryMesh from "./IndustryMesh";
 import StatBox from "../../components/StatBox";
 import ProgressCircle from "../../components/ProgressCircle";
 import { useApiContext } from "../../context/ApiContext";
-import { handleReconection } from "../../helpers/handleReconection";
+import { handleReconnection } from "../../helpers/handleReconnection";
 import { Link } from "react-router-dom";
 
 const Dashboard = () => {
@@ -24,7 +24,7 @@ const Dashboard = () => {
     useApiContext();
 
   useEffect(() => {
-    handleReconection(generalSettings.token, updateIndustrySettings);
+    handleReconnection(generalSettings.token, updateIndustrySettings);
   }, []);
 
   return (
@@ -167,7 +167,7 @@ const Dashboard = () => {
           backgroundColor={colors.primary[400]}
           overflow="auto"
         >
-          {/* insertar aqui */}
+          {/* insertar aquí */}
           <Box
             display="flex"
             justifyContent="space-between"
@@ -263,7 +263,7 @@ const Dashboard = () => {
             >
               48,352 Tm Harina entregada
             </Typography>
-            <Typography>Dompromiso asumido por la industria</Typography>
+            <Typography>Compromiso asumido por la industria</Typography>
           </Box>
         </Box>
       </Box>

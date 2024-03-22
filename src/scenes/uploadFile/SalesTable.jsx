@@ -9,12 +9,14 @@ import Typography from "@mui/material/Typography";
 //import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import { saveAcopio } from "../../services/IndustryService";
 
 const SalesTable = ({ fileInfo, rowName, handleClose }) => {
   const { generalSettings } = useApiContext();
   //const [selectedSheets, setSelectedSheets] = React.useState({});
   const [rows, setRows] = useState([]);
   const [total, setTotal] = useState(0);
+  const [batch, setBatch] = useState("");
 
   const handleButtonClick = async () => {
     const reviewFunction = rowConfig[rowName.short_name].reviewFunction;
@@ -23,12 +25,14 @@ const SalesTable = ({ fileInfo, rowName, handleClose }) => {
       fileInfo.data.file_name,
       //selectedSheets,
       setRows,
-      setTotal
+      setTotal,
+      setBatch
     );
   };
 
-  const handleCloseForm = () => {
+  const handleCloseForm = async () => {
     //setSelectedSheets({});
+    saveAcopio(generalSettings.token, batch);
     setRows([]);
     setTotal(0);
     handleClose();
@@ -111,7 +115,7 @@ const SalesTable = ({ fileInfo, rowName, handleClose }) => {
           <div />
         )}
         {rowName.short_name === "priceclosing" ? (
-          <Typography>Total dolares: {total[1]}</Typography>
+          <Typography>Total dólares: {total[1]}</Typography>
         ) : (
           <div />
         )}

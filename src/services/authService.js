@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-// solicitudes generales para inicio y cerrado de sesion
+// solicitudes generales para inicio y cerrado de sesión
 
 export const userLogin = async (credentials) => {
   try {
