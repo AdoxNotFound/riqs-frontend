@@ -1,8 +1,8 @@
 # RIQS - Registro de Informes Quincenales de Soya
 
-react: 18.2.0
-node: 20.10.0
-npm: 10.2.3
+- react: 18.2.0
+- node: 20.10.0
+- npm: 10.2.3
 
 ### `npm start`
 
